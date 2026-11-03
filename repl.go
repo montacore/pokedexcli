@@ -9,8 +9,9 @@ import (
 type cliCommand struct {
 	name		string
 	description	string
-	callback	func() error
+	callback	func(cfg *config) error
 }
+
 func getCommands() map[string]cliCommand{
 
 	commands := map[string]cliCommand{
@@ -24,15 +25,28 @@ func getCommands() map[string]cliCommand{
 			description:	"Display a help message",
 			callback:		commandHelp,
 		},
+		"map": {
+			name:			"map",
+			description:	"Display a list of 20 map locations",
+			callback:		commandMap,
+
+		},
+		"mapd": {
+			name:			"mapd",
+			description:	"Display a list of the previous 20 map locations",
+			callback:		commandMapd,
+		},
 	}
 	return commands	
 }
-
+type config struct {
+	commands	map[string]cliCommand
+}
 func cleanInput(text string) []string{
 	output := strings.Fields(strings.ToLower(text))
 	return output
 }
-func startRepl(){
+func startRepl(cfg *config){
 
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -49,7 +63,7 @@ func startRepl(){
 				commands := getCommands()
 				if cmd, ok := commands[firstWord]; ok {
 
-					err := cmd.callback()
+					err := cmd.callback(cfg)
 					if err != nil {
 						fmt.Println(err)
 					}
