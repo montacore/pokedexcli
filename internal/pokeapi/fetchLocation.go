@@ -1,4 +1,4 @@
-package internal
+package pokeapi 
 
 import (
 	"fmt"
@@ -6,6 +6,23 @@ import (
 	"encoding/json"
 	"net/http"
 )
+type Client struct {
+	httpClient		http.Client
+}
+
+func NewClient(timeout time.Duration) Client {
+	client := http.Client{
+		Timeout: timeout,
+	}
+	return Client{httpClient: client}
+}
+
+func (c Client) ListLocations(pageURL *string) (LocationAreaResponse, error){
+	baseURL := "https://pokeapi.co/api/v2/location-area/"
+	if pageURL != nil {
+		c.httpClient.Get(pageURL)
+	}
+}
 
 func fetchLocations(url string) (*Location, error){
 	resp, err := http.Get(url)
