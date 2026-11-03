@@ -1,0 +1,4 @@
+# command-line-arguments [command-line-arguments.test]
+./repl_test.go:37:13: undefined: cleanInput
+FAIL	command-line-arguments [build failed]
+FAIL
