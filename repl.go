@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"bufio"
 	"os"
+	"pokedexcli/internal/pokeapi"
 )
 type cliCommand struct {
 	name		string
@@ -41,6 +42,9 @@ func getCommands() map[string]cliCommand{
 }
 type config struct {
 	commands	map[string]cliCommand
+	client		pokeapi.Client
+	next		*string
+	previous	*string
 }
 func cleanInput(text string) []string{
 	output := strings.Fields(strings.ToLower(text))

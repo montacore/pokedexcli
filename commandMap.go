@@ -2,31 +2,21 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-	"encoding/json"
-	"io"
-	"log"
+	"pokemoncli/internal/pokeapi"
 )
 
 
-func commandMap(cfg *config) string{
-	url := "https://pokeapi.co/api/v2/location/"
-	resp, err := http.Get(url)
+func commandMap(cfg *config) error{
+	resp, err := cfg.client.ListLocations(cfg.next)
 	if err != nil {
-		fmt.Errorf("Error retrieving location data: %s", err)
+		return err
 	}
-	defer resp.Body.Close()
+	cfg.next = resp.Next
+	cfg.previous = resp.Previous
 
-	bodyBytes, byte_err := io.ReadAll(resp.Body)
-	if byte_err != nil {
-		log.Fatalf("Failed to read response body: %v", byte_err)
+	for _, val := range resp.Results{
+		fmt.Println(val.Name)
 	}
+	return nil
 	
-	var loc Location
-	json_err := json.Unmarshal(bodyBytes, &loc)
-	if json_err != nil {
-		log.Fatalf("Failed to Unmarshal JSON: %v", json_err)
-	}
-
-	return loc.Name 
 }

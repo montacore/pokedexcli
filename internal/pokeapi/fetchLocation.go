@@ -2,10 +2,12 @@ package pokeapi
 
 import (
 	"fmt"
-	"io"
 	"encoding/json"
 	"net/http"
+	"time"
 )
+
+const	BASEURL = "https://pokeapi.co/api/v2/location-area/"
 type Client struct {
 	httpClient		http.Client
 }
@@ -18,27 +20,28 @@ func NewClient(timeout time.Duration) Client {
 }
 
 func (c Client) ListLocations(pageURL *string) (LocationAreaResponse, error){
-	baseURL := "https://pokeapi.co/api/v2/location-area/"
+	finalURL := ""
 	if pageURL != nil {
-		c.httpClient.Get(pageURL)
+		finalURL = *pageURL
+	} else{
+		finalURL = BASEURL
 	}
-}
-
-func fetchLocations(url string) (*Location, error){
-	resp, err := http.Get(url)
+	resp, err := c.httpClient.Get(finalURL)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to make request: %w", err)
+		return LocationAreaResponse{}, fmt.Errorf("failed to make request %w", err)
 	}
+
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return LocationAreaResponse{}, fmt.Errorf("Unexpected status code: %d", resp.StatusCode)
 	}
-
-	var loc Location
-	if json_err := json.NewDecoder(resp.Body).Decode(&loc); json_err != nil {
-		return nil, fmt.Errorf("failed to decode JSON response: %w", json_err)
+	var locResp LocationAreaResponse
+	if jsonErr := json.NewDecoder(resp.Body).Decode(&locResp); jsonErr != nil {
+		return LocationAreaResponse{}, fmt.Errorf("failed to decode JSON response: %w", jsonErr)
 	}
+	return locResp, nil
 
-	return &loc, nil 
+
 }
+
