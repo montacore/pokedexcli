@@ -32,10 +32,10 @@ func getCommands() map[string]cliCommand{
 			callback:		commandMap,
 
 		},
-		"mapd": {
-			name:			"mapd",
+		"mapb": {
+			name:			"mapb",
 			description:	"Display a list of the previous 20 map locations",
-			callback:		commandMapd,
+			callback:		commandMapb,
 		},
 	}
 	return commands	

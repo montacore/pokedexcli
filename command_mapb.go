@@ -8,8 +8,8 @@ import (
 
 func commandMapb(cfg *config) error{
 	if cfg.previous == nil {
-		error := new Error("you're on the first page")
-		return error
+		return errors.New("you're on the first page")
+		
 	}
 	resp, err := cfg.client.ListLocations(cfg.previous)
 	if err != nil {
