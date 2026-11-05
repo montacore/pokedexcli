@@ -7,9 +7,8 @@ import (
 
 func TestAddGet(t *testing.T) {
 	cache := NewCache(time.Hour)
-
+	
 	cache.Add("key1",  []byte("value1"))
-	cache.reapLoop()
 	value, ok := cache.Get("key1")
 	if !ok {
 		t.Error("expected key1 to exist")
@@ -21,7 +20,8 @@ func TestAddGet(t *testing.T) {
 }
 
 func TestReapLoop(t *testing.T) {
-	cache := NewCache(time.Hour)
+	cache := NewCache(20 * time.Millisecond)
+
 	deadline := time.Now().Add(3*time.Second)
 	cache.Add("some-key", []byte("some-value"))
 	for time.Now().Before(deadline) {

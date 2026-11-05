@@ -19,13 +19,13 @@ func NewCache(interval time.Duration) *Cache {
 	cache:= &Cache{
 		data: make(map[string]CacheEntry),
 	}
-
 	go cache.reapLoop(interval)
 	
 	return cache
 }
 
 func (c *Cache) Add(key string, val []byte){
+
 	c.mut.Lock()
 	defer c.mut.Unlock()
 	cachedEntry := CacheEntry{}
