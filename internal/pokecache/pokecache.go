@@ -23,18 +23,40 @@ func NewCache(interval time.Duration) *Cache {
 	return c
 }
 
-func (c *Cache) Add(key string, val []byte)
+func (c *Cache) Add(key string, val []byte){
+	c.mut.Lock()
+	defer c.mut.Unlock()
+	cachedEntry := CacheEntry{}
+	cachedEntry.createdAt = time.Now()
+	cachedEntry.val = val
+	c.data[key] = cachedEntry
+}
 
-
+func (c *Cache) Get(key string) ([]byte, bool) {
+	c.mut.Lock()
+	defer c.mut.Unlock()
+	entry, ok := c.data[key]
+	if !ok {
+		return nil, false
+	}
+	return entry.val, true
+}
+/*
 //NOTE: reapLoop runs a ticker to remove expired keys periodically
 func (c *Cache) reapLoop(interval time.Duration) {
 	ticker := time.NewTicker(interval)
-	for range ticker.C {
-		c.mut.Lock()
-
+	for i := range ticker.C {
+		for k, entry := range c.data {
+			current := time.Now()
+			diff := current -  entry.createdAt
+			if diff >= interval{
+				c.mut.Lock()
+				defer c.mut.Unlock()
 				delete(c.data, k)
 			}
-			c.mut.Unlock()
 		}
+		
 	}
+
 }
+*/
