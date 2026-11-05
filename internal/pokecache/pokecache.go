@@ -1,7 +1,6 @@
 package pokecache
 
 import (
-	"fmt"
 	"time"
 	"sync"
 )
@@ -17,10 +16,13 @@ type CacheEntry struct {
 }
 
 func NewCache(interval time.Duration) *Cache {
-	c:= &Cache{
+	cache:= &Cache{
 		data: make(map[string]CacheEntry),
 	}
-	return c
+
+	go cache.reapLoop(interval)
+	
+	return cache
 }
 
 func (c *Cache) Add(key string, val []byte){
@@ -41,22 +43,20 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 	}
 	return entry.val, true
 }
-/*
+
 //NOTE: reapLoop runs a ticker to remove expired keys periodically
 func (c *Cache) reapLoop(interval time.Duration) {
 	ticker := time.NewTicker(interval)
-	for i := range ticker.C {
+	for range ticker.C {
+		c.mut.Lock()
 		for k, entry := range c.data {
-			current := time.Now()
-			diff := current -  entry.createdAt
-			if diff >= interval{
-				c.mut.Lock()
-				defer c.mut.Unlock()
+			age := time.Now().Sub(entry.createdAt)
+			if age >= interval{
 				delete(c.data, k)
 			}
 		}
-		
+	c.mut.Unlock()	
 	}
 
 }
-*/
+
