@@ -6,7 +6,7 @@ import (
 )
 
 
-func commandMapb(cfg *config) error{
+func commandMapb(cfg *config, args ...string) error{
 	if cfg.previous == nil {
 		return errors.New("you're on the first page")
 		

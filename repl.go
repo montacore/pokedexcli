@@ -10,7 +10,7 @@ import (
 type cliCommand struct {
 	name		string
 	description	string
-	callback	func(cfg *config) error
+	callback	func(cfg *config, args ...string) error
 }
 
 func getCommands() map[string]cliCommand{
@@ -30,7 +30,6 @@ func getCommands() map[string]cliCommand{
 			name:			"map",
 			description:	"Display a list of 20 map locations",
 			callback:		commandMap,
-
 		},
 		"mapb": {
 			name:			"mapb",
@@ -39,9 +38,14 @@ func getCommands() map[string]cliCommand{
 		},
 		"explore": {
 			name:			"explore",
-			description:	"Display the names of all pokemon available in an area"
-			callback:		explore,
-		}
+			description:	"Display the names of all pokemon available in an area",
+			callback:		commandExplore,
+		},
+		"catch": {
+			name:			"catch",
+			description:	"Takes the name of of a pokemon to add to your pokedex",
+			callback:		commandCatch,
+		},
 	}
 	return commands	
 }
@@ -56,8 +60,6 @@ func cleanInput(text string) []string{
 	return output
 }
 func startRepl(cfg *config){
-
-
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
@@ -69,17 +71,18 @@ func startRepl(cfg *config){
 
 			if len(cleanedInput) > 0 {
 				firstWord := cleanedInput[0]
+				arg := cleanedInput[1:]
 				commands := getCommands()
 				if cmd, ok := commands[firstWord]; ok {
 
-					err := cmd.callback(cfg)
+					err := cmd.callback(cfg, arg...)
 					if err != nil {
 						fmt.Println(err)
 					}
 				} else {
 					fmt.Print("Unknown command")
 				}
-			} 
+			}
 		}
 
 	}

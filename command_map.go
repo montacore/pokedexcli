@@ -5,7 +5,7 @@ import (
 )
 
 
-func commandMap(cfg *config) error{
+func commandMap(cfg *config, args ...string) error{
 	resp, err := cfg.client.ListLocations(cfg.next)
 	if err != nil {
 		return err
