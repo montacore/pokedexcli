@@ -1,8 +1,0 @@
-Permissions Size User     Date Modified Name
-.rw-r--r--     0 jtnallie  3 Nov 01:55  dirs.txt
-.rw-r--r--    29 jtnallie  2 Nov 22:28  go.mod
-.rw-r--r--    80 jtnallie  2 Nov 23:29  main.go
-.rwxr-xr-x  2.4M jtnallie  2 Nov 23:29  pokedexcli
-.rw-r--r--   141 jtnallie  2 Nov 23:27  repl.go
-.rw-r--r--  1.3k jtnallie  2 Nov 23:26  repl_test.go
-.rw-r--r--   147 jtnallie  3 Nov 01:52  test.txt

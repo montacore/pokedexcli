@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"math"
 )
 func commandCatch(cfg *config, args ...string) error{
 	if len(args) != 1 {
@@ -16,25 +15,23 @@ func commandCatch(cfg *config, args ...string) error{
 	}
 	fmt.Printf("Throwing a Pokeball at %s...\n", pokemon.Name)
 	
-	res := catchCalculation(float64(pokemon.BaseExperience))
+	res := catchCalculation(pokemon.BaseExperience)
 	if res{
 		fmt.Printf("%s was caught!\n", pokemon.Name)
+		cfg.pokedex[pokemon.Name] = pokemon
 	} else {
 		fmt.Printf("%s escaped!\n", pokemon.Name)
 	}
-	cfg.pokedex[pokemon.Name] = pokemon
 	return nil
 }
 
-func catchCalculation(baseExperience float64) bool {
-	roll := rand.Intn(65535)
-	maxRoll := 65535
-	calculation := 65535 * math.Pow(baseExperience/255,.25)
-	threshold := float64(maxRoll) - calculation
-	if threshold >= float64(roll) {
-		return true
-	} else{
+func catchCalculation(baseExperience int) bool {
+	roll := rand.Intn(baseExperience)
+	fmt.Printf("[DEBUG] roll: %d baseExperience: %d", roll, baseExperience)
+	if roll > 70 {
 		return false
+	} else{
+		return true
 	}
 
 }

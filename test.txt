@@ -1,7 +1,0 @@
-ok  	pokedexcli	(cached)
-?   	pokedexcli/internal/pokeapi	[no test files]
---- FAIL: TestReapLoop (3.00s)
-    pokecache_test.go:35: expected item to be removed
-FAIL
-FAIL	pokedexcli/internal/pokecache	3.006s
-FAIL
