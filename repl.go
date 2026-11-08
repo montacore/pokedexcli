@@ -50,6 +50,7 @@ func getCommands() map[string]cliCommand{
 	return commands	
 }
 type config struct {
+	pokedex		map[string]pokeapi.PokemonStatsResponse
 	commands	map[string]cliCommand
 	client		pokeapi.Client
 	next		*string

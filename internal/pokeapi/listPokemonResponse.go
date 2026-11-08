@@ -24,7 +24,6 @@ type PokemonStatsResponse struct {
 			URL  string `json:"url"`
 		} `json:"type"`
 	} `json:"types"`
-	PastTypes []interface{} `json:"past_types"`
 }
 
 
